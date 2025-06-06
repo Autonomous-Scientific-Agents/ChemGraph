@@ -54,3 +54,5 @@ quote-style = "preserve"  # Keep existing quote style
 indent-style = "space"  # Use spaces for indentation
 skip-magic-trailing-comma = false  # Ensure Black-style formatting
 
+[tool.setuptools.package-data]
+"chemgraph.tools.files" = ["*"]
