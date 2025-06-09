@@ -7,8 +7,7 @@ import ase
 from chemgraph.models.graspa_input import GRASPAInputSchema
 from langchain_core.tools import tool
 
-
-_file_dir = Path(__file__).parent / "files" / "graspa_sycl_template"
+_file_dir = Path(__file__).parent / "files" 
 
 
 @tool
@@ -179,13 +178,14 @@ def run_graspa(graspa_input: GRASPAInputSchema):
     out_dir = output_path / f"{name}_{adsorbate}_{temperature}_{pressure:0e}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    atoms = _get_cif_from_chargemol(cif_path)
+    #atoms = _get_cif_from_chargemol(cif_path)
     # Write CIF file with charges
-    _write_cif(atoms, out_dir=out_dir, name=name + ".cif")
+    #_write_cif(atoms, out_dir=out_dir, name=name + ".cif")
+    atoms = ase.io.read(cif_path)
 
     # Copy other input files (simulation.input, force fields and definition files) from template folder.
     subprocess.run(f"cp {_file_dir}/* {out_dir}/", shell=True)
-    print(_file_dir)
+    shutil.copy2(cif_path, os.path.join(out_dir, name + '.cif'))
     [uc_x, uc_y, uc_z] = _calculate_cell_size(atoms=atoms)
 
     # Modify input from template simulation.input
